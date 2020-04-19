@@ -220,3 +220,88 @@ print(reviews.apply(star_rating, axis='columns'))
 del reviews_points_mean
 
 # %%
+"""Groupwise Analysis"""
+# Replicating reviews['points'].value_counts()
+print('Value count of each rating: ')
+print(reviews.groupby('points')['points'].count())
+print('Min price of each rating:')
+print(reviews.groupby('points')['price'].min())
+
+# %%
+"""Printing first wine reviewed by each winery"""
+reviews.groupby('winery').apply(lambda df: df['title'].iloc[0])
+
+# %%
+"""Best wine by country and province"""
+reviews.groupby(['country', 'province']).apply(lambda df: df.loc[df['points'].idxmax()])
+
+# %%
+"""Generate small statistical analysis"""
+reviews.groupby(['country'])['price'].agg([len, max, min])
+
+# %%
+"""Multi-Indexes"""
+countries_reviewed = reviews.groupby(['country', 'province'])['description'].agg([len])
+print(countries_reviewed)
+print(type(countries_reviewed.index))
+
+# %%
+"""Resetting multi-index"""
+print(countries_reviewed.reset_index())
+
+# %%
+"""Sorting"""
+# Sorting countries reviewed by len
+countries_reviewed = countries_reviewed.reset_index()
+print(countries_reviewed.sort_values(by='len'))
+# %%
+# Sorting countries reviewed by len in descending
+print(countries_reviewed.sort_values(by='len', ascending=False))
+
+# %%
+# Sorting countries reviewed by index
+print(countries_reviewed.sort_index())
+
+# %%
+"""Sorting by countries then len"""
+countries_reviewed.sort_values(['country', 'len'])
+
+# %%
+"""Most common reviewers with their reviews count"""
+reviews_written = reviews.groupby(['taster_name'])['taster_name'].count().sort_values(ascending=False)
+print(reviews_written)
+
+# %%
+"""What is the best wine I can buy for a given amount of money?"""
+best_rating_per_price = reviews.groupby('price')['points'].max()
+print(best_rating_per_price)
+
+# %%
+"""Max and min price of wine for each variety"""
+price_extremes = reviews.groupby('variety')['price'].agg([max, min])
+print(price_extremes)
+# Sort in descending order based on minimum price, then on maximum price (to break ties)
+print(price_extremes.sort_values(by=['min', 'max'], ascending=False))
+
+# %%
+"""Create a Series whose index is reviewers and whose values is the average review score given out by that reviewer. """
+reviewers_mean_rating = reviews.groupby('taster_name')['points'].mean()
+print(reviewers_mean_rating)
+
+# %%
+"""What combination of countries and varieties are most common? Sort the values in the Series in descending order
+based on wine count.
+"""
+country_variety_count = reviews.groupby(['country', 'variety']).size().sort_values(ascending=False)
+print(country_variety_count)
+
+# %%
+"""End of Grouping and Sorting"""
+del best_rating_per_price
+del countries_reviewed
+del country_variety_count
+del price_extremes
+del reviewers_mean_rating
+del reviews_written
+
+# %%
