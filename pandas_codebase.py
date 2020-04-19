@@ -305,3 +305,51 @@ del reviewers_mean_rating
 del reviews_written
 
 # %%
+"""Dtypes"""
+# Printing datatype of price column
+print('Price datatype: ', reviews['price'].dtype)
+# Printing datatype of each column
+print(reviews.dtypes)
+
+# %%
+"""Changing datatype of a column"""
+reviews['points'].astype('float64')
+
+# %%
+"""Index data type"""
+print(reviews.index.dtype)
+
+# %%
+"""Missing Data"""
+# Printing rows with missing country
+print(reviews[pd.isnull(reviews['country'])])
+# OR print(reviews[reviews['country'].isnull()])
+
+# %%
+"""Number of rows with missing country"""
+# True is treated as 1 and False as 0 in sum() function
+reviews['country'].isnull().sum()
+# OR len(reviews[reviews['country'].isnull()])
+
+# %%
+"""Replacing missing values with a constant value"""
+reviews['country'].fillna('Unknown')
+
+# %%
+"""Replacing values in a column"""
+# Replacing "@kerinokeefe" with "@kerino" in taster_twitter_handle
+reviews['taster_twitter_handle'].replace('@kerinokeefe', '@kerino')
+
+# %%
+"""What are the most common wine-producing regions? Create a Series counting the number of times each value occurs in 
+the region_1 field. This field is often missing data, so replace missing values with Unknown. Sort in desc order."""
+missing_removed = reviews['region_1'].fillna('Unknown')
+reviews_per_region = missing_removed.value_counts()
+print(reviews_per_region)
+
+# %%
+"""End of Data Types and Missing Values"""
+del missing_removed
+del reviews_per_region
+
+#%%
