@@ -352,4 +352,24 @@ print(reviews_per_region)
 del missing_removed
 del reviews_per_region
 
-#%%
+# %%
+"""Rename points column to score"""
+reviews2 = reviews.rename(columns={'points': 'score'})
+
+# %%
+"""Rename index of the dataframe
+You'll probably rename columns very often, but rename index values very rarely. For that, set_index()
+ is usually more convenient."""
+reviews.rename(index={0: 'zero_entry', 1: 'first_entry'})
+
+# %%
+"""Rename axis"""
+reviews3 = reviews.rename_axis('wines', axis='rows').rename_axis('fields', axis='columns')
+print(reviews3)
+
+# %%
+"""End of Renaming. For Combining use concat(), join(), merge()"""
+del reviews2
+del reviews3
+
+# %%
