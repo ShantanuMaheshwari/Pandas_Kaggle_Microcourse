@@ -1,6 +1,6 @@
 """
 Created by Shantanu Maheshwari on 2:47 PM 16/04/20.
-Usage: Kaggle Pandas Micro-course codes
+Usage: Kaggle Pandas Micro-course codebase
 """
 # %%
 """Importing Libraries"""
@@ -81,6 +81,7 @@ del reviews2
 
 # %%
 """Condition Selection (==, &, |)"""
+# TODO: Implement using pd.Dataframe.query()
 # Printing whether country is "Italy" or not
 print(reviews['country'] == 'Italy')
 # Printing only those rows where country == "Italy"
@@ -97,6 +98,10 @@ print(reviews.loc[reviews['country'].isin(['Italy', 'France'])])
 """Create a DataFrame top_oceania_wines containing all reviews with at least 95 points (out of 100) for wines
  from Australia or New Zealand."""
 top_oceania_wines = reviews.loc[(reviews['points'] >= 95) & (reviews['country'].isin(['Australia', 'New Zealand']))]
+
+# %%
+"""Printing all columns with number of missing(null) values"""
+print("Columns with their missing values: ", reviews[:].isnull().sum(), sep='\n')
 
 # %%
 """Condition Selection (Handling Null Values)"""
@@ -152,10 +157,13 @@ print(pd.Series(map(lambda x: x - reviews_points_mean, reviews['points'])))
 
 # %%
 """APPLY function"""
+
+
 # suppose that we wanted to remean the scores the wines received to 0
 def remean_points(row):
     row['points'] -= reviews_points_mean
     return row
+
 
 reviews.apply(remean_points, axis='columns')
 
@@ -192,6 +200,8 @@ to understand - we'd like to translate them into simple star ratings. A score of
  a score of at least 85 but less than 95 is 2 stars. Any other score is 1 star.
 Also, the Canadian Vintners Association bought a lot of ads on the site, so any wines from Canada should automatically
  get 3 stars, regardless of points."""
+
+
 def star_rating(country, points):
     if country == 'Canada':
         return 3
@@ -201,8 +211,11 @@ def star_rating(country, points):
         return 2
     else:
         return 1
+
+
 # Using MAP function
 print(pd.Series(map(star_rating, reviews['country'], reviews['points'])))
+
 
 def star_rating(row):
     if row['country'] == 'Canada':
@@ -213,6 +226,8 @@ def star_rating(row):
         return 2
     else:
         return 1
+
+
 print(reviews.apply(star_rating, axis='columns'))
 
 # %%
